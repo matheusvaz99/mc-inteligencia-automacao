@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MC | Automação de Rotinas Repetitivas</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variáveis de Cores */
+        :root {
+            --preto: #1a1a1a;
+            --cinza-escuro: #4a4a4a; 
+            --cinza-medio: #999999;
+            --cinza-claro: #e6e6e6;
+            --branco: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--branco) 0%, var(--branco) 30%, var(--cinza-medio) 100%);
+            color: var(--preto);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2.5rem 0;
+            text-align: center;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- CABEÇALHO COM LOGO --- */
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .logo-img {
+            height: 48px;
+            width: auto;
+        }
+
+        header h1 {
+            font-size: 2.4rem; 
+            letter-spacing: 1px; 
+            margin-bottom: 0; 
+            font-weight: 800;
+            color: var(--preto);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem; 
+            flex-wrap: wrap; 
+        }
+
+        nav a {
+            color: var(--cinza-escuro);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--preto);
+            border-bottom: 2px solid var(--preto);
+        }
+
+        main {
+            flex: 1;
+            padding: 3rem 1rem;
+            max-width: 1200px; 
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        section {
+            background: var(--branco); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            padding: 4rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08); 
+        }
+
+        section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            color: var(--preto);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        section h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(to right, var(--preto), var(--cinza-medio));
+            border-radius: 2px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            color: var(--cinza-escuro);
+        }
+
+        strong {
+            color: var(--preto);
+        }
+
+        #home {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 3rem;
+            align-items: center; 
+        }
+
+        .home-video-container {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden; 
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15); 
+            border: 4px solid var(--branco); 
+            background: var(--cinza-escuro); 
+        }
+
+        .home-video-container video {
+            width: 100%;
+            height: auto;
+            display: block; 
+        }
+
+        @media (max-width: 768px) {
+            #home {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            section h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        #servicos ul {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        #servicos li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: var(--cinza-escuro);
+        }
+
+        #servicos li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--preto);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: var(--cinza-claro);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: var(--branco);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--preto) 0%, var(--cinza-escuro) 100%);
+            color: var(--branco);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .step-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--preto);
+        }
+
+        .cases-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .case-item {
+            border-left: 4px solid var(--cinza-escuro);
+            padding: 1.5rem;
+            background: rgba(230, 230, 230, 0.4);
+            border-radius: 0 8px 8px 0;
+            transition: background 0.3s;
+        }
+
+        .case-item:hover {
+            background: rgba(230, 230, 230, 0.8);
+        }
+
+        .case-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--preto);
+        }
+
+        @media (max-width: 768px) {
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--cinza-claro);
+            border-radius: 8px;
+            background: var(--branco);
+            color: var(--preto);
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--cinza-escuro);
+            box-shadow: 0 0 0 3px rgba(74, 74, 74, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--preto) 0%, var(--cinza-escuro) 100%);
+            color: var(--branco);
+            border: none;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.3s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--preto);
+            color: var(--cinza-claro);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title-container">
+            <img src="logo.png" alt="Logo MC" class="logo-img">
+            <h1>Inteligência em Automação</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#como-funciona">Como Funciona</a></li>
+                <li><a href="#casos-uso">Casos Práticos</a></li>
+                <li><a href="#fale-conosco">Fale Conosco</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="home-text">
+                <h2>Ganhe tempo para o que realmente importa.</h2>
+                <p>A <strong>MC Inteligência em Automação</strong> transforma horas de trabalho manual e repetitivo em processos automáticos e eficientes.</p>
+                <p>Chega de copiar e colar. Nós criamos robôs de software que manipulam planilhas **XLSX**, extraem dados de sites e integram sistemas, libertando você para focar no crescimento do seu negócio.</p>
+            </div>
+            
+            <div class="home-video-container">
+                <video autoplay muted loop playsinline>
+                    <source src="link-para-seu-video-exemplo-excel.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeos HTML5.
+                </video>
+            </div>
+        </section>
+
+        <section id="servicos">
+            <h2>Nossos Serviços</h2>
+            <p>Desenvolvemos soluções sob medida usando as melhores práticas de engenharia de software:</p>
+            <ul>
+                <li><strong>Automação de Planilhas (Excel/XLSX):</strong> Leitura, processamento, consolidação de múltiplos arquivos e geração de dashboards automáticos.</li>
+                <li><strong>Integração de APIs & Sistemas:</strong> Conectamos seu ERP, CRM ou ferramentas financeiras para eliminar a digitação manual.</li>
+                <li><strong>Web Scraping Profissional:</strong> Coleta estruturada de dados de sites para monitoramento de concorrência ou análise de mercado.</li>
+            </ul>
+        </section>
+
+        <section id="como-funciona">
+            <h2>Como Funciona</h2>
+            <p>Nosso processo é transparente e focado em resolver sua dor real, sem jargões complicados.</p>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Diagnóstico</h3>
+                    <p>Mapeamos juntos as tarefas que mais sugam o tempo da sua equipe hoje e avaliamos a viabilidade técnica.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Desenvolvimento</h3>
+                    <p>Construímos os robôs e scripts sob medida, garantindo segurança e precisão na manipulação dos seus dados.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Implantação</h3>
+                    <p>Colocamos a automação para rodar no seu ambiente e ensinamos sua equipe a operar a nova solução com um clique.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="casos-uso">
+            <h2>Casos Práticos</h2>
+            <p>Veja exemplos de gargalos que solucionamos com código e inteligência:</p>
+            
+            <div class="cases-container">
+                <div class="case-item">
+                    <h4>📊 Conciliação Financeira</h4>
+                    <p>Um script que baixa relatórios bancários diários, cruza com o ERP contábil e aponta divergências em segundos.</p>
+                </div>
+                <div class="case-item">
+                    <h4>🌐 Monitoramento de Concorrentes</h4>
+                    <p>Robôs de web scraping que varrem e-commerces diariamente e geram uma planilha atualizada com os preços do mercado.</p>
+                </div>
+                <div class="case-item">
+                    <h4>🤖 Triagem de Documentos</h4>
+                    <p>Sistemas que leem PDFs massivos (como notas fiscais), extraem os dados vitais e preenchem bancos de dados automaticamente.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="fale-conosco">
+            <h2>Fale Conosco</h2>
+            <p>Descreva qual processo consome mais tempo hoje, e nós desenharemos a solução de automação.</p>
+            <form action="#" method="POST">
+                <input type="text" name="nome" placeholder="Seu Nome" required>
+                <input type="email" name="email" placeholder="Seu E-mail Profissional" required>
+                <textarea name="mensagem" rows="5" placeholder="Ex: Preciso processar 50 planilhas XLSX todo dia e enviar o resumo por e-mail." required></textarea>
+                <button type="submit">Solicitar Diagnóstico Gratuito</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MC Inteligência em Automação. Todos os direitos reservados.</p>
+    </footer>
+
+</body>
+</html>
