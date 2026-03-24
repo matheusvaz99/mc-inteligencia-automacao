@@ -416,18 +416,62 @@
         <section id="fale-conosco">
             <h2>Fale Conosco</h2>
             <p>Descreva qual processo consome mais tempo hoje, e nós desenharemos a solução de automação.</p>
-            <form action="https://api-mcp-automatiza.onrender.com/webhook/contato" method="POST">
-                <input type="text" name="nome" placeholder="Seu Nome" required>
-                <input type="email" name="email" placeholder="Seu E-mail Profissional" required>
-                <textarea name="mensagem" rows="5" placeholder="Ex: Preciso processar 50 planilhas XLSX todo dia e enviar o resumo por e-mail." required></textarea>
-                <button type="submit">Solicitar Diagnóstico Gratuito</button>
+            <form id="form-contato" action="https://api-mcp-automatiza.onrender.com/webhook/contato" method="POST">
+            <input type="text" name="nome" placeholder="Seu Nome" required>
+            <input type="email" name="email" placeholder="Seu E-mail Profissional" required>
+            <textarea name="mensagem" rows="5" placeholder="Ex: Preciso processar 50 planilhas XLSX todo dia e enviar o resumo por e-mail." required></textarea>
+            <button type="submit" id="btn-enviar">Solicitar Diagnóstico Gratuito</button>
             </form>
+            <div id="mensagem-sucesso" style="display: none; text-align: center; padding: 3rem; background: var(--cinza-claro); border-radius: 12px; border: 2px dashed var(--preto); margin-top: 2rem;">
+                <h3 style="font-size: 1.8rem; margin-bottom: 1rem; color: var(--preto);">✅ Pedido Recebido!</h3>
+                <p style="margin-bottom: 0;">Nossa equipe já recebeu sua demanda e nosso motor de automação vai enviar uma resposta para o seu e-mail em breve.</p>
+            </div>
         </section>
     </main>
 
     <footer>
         <p>&copy; 2026 MC Inteligência em Automação. Todos os direitos reservados.</p>
     </footer>
+<script>
+        const form = document.getElementById('form-contato');
+        const btn = document.getElementById('btn-enviar');
+        const mensagemSucesso = document.getElementById('mensagem-sucesso');
 
+        form.addEventListener('submit', async (evento) => {
+            // 1. Impede o navegador de pular para a página branca de JSON
+            evento.preventDefault(); 
+            
+            // 2. Muda o visual do botão para mostrar que está pensando
+            const textoOriginal = btn.innerText;
+            btn.innerText = "Enviando pedido...";
+            btn.style.opacity = "0.7";
+            btn.disabled = true;
+
+            try {
+                // 3. Empacota os dados e manda para o Render
+                const formData = new FormData(form);
+                const resposta = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (resposta.ok) {
+                    // 4. Se a API der o "OK", esconde o formulário e mostra a tela bonita!
+                    form.style.display = 'none';
+                    mensagemSucesso.style.display = 'block';
+                } else {
+                    alert("Ocorreu um erro no servidor. Tente novamente.");
+                    btn.innerText = textoOriginal;
+                    btn.style.opacity = "1";
+                    btn.disabled = false;
+                }
+            } catch (erro) {
+                alert("Erro de conexão. Verifique sua internet e tente novamente.");
+                btn.innerText = textoOriginal;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+            }
+        });
+    </script>
 </body>
 </html>
