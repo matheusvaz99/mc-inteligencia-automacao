@@ -35,7 +35,7 @@
             flex-direction: column;
         }
 
-        /* --- HEADER RESPONSIVO (ALTERAÇÃO 1) --- */
+        /* --- HEADER COM LINHAS DOURADAS --- */
         header {
             background: var(--azul-noturno);
             padding: 2.5rem 1rem;
@@ -63,6 +63,11 @@
             flex-wrap: wrap; 
         }
 
+        nav li {
+            position: relative;
+            padding-bottom: 8px; /* Espaço para a linha */
+        }
+
         nav a {
             color: var(--branco-puro);
             text-decoration: none;
@@ -71,6 +76,26 @@
             letter-spacing: 2px;
             opacity: 0.8;
             white-space: nowrap;
+            transition: opacity 0.3s;
+        }
+
+        /* A LINHA DOURADA NO HEADER */
+        nav li::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px; /* Tamanho da linha embaixo de cada item */
+            height: 2px;
+            background-color: var(--dourado-detalhe);
+            opacity: 0.6; /* Sutil por padrão */
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        nav li:hover::after {
+            width: 100%; /* A linha cresce ao passar o mouse */
+            opacity: 1;
         }
 
         nav a:hover { opacity: 1; }
@@ -115,7 +140,6 @@
 
         strong { color: var(--azul-noturno); }
 
-        /* --- ESTRUTURA HOME 60/40 (ALTERAÇÃO 2) --- */
         #home {
             display: grid;
             grid-template-columns: 1.6fr 1fr; 
